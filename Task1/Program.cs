@@ -5,18 +5,22 @@ using RestSharp;
 
 namespace Task1
 {
+    /// <summary>
+    /// Реализовать метод отправки GET запроса https://swapi.dev/api/people/1/
+    /// В ответ на запрос возвращается информация по герою Звездных войн:
+    /// Десериализовать ответ в объект и вывести в консоль список ссылок на фильмы(ключ ‘films’)
+    /// </summary>
     class Program
     {
-        private static string url = "https://swapi.dev/api/people/1/";
+        private static readonly string url = "https://swapi.dev/";
 
         static void Main(string[] args)
         {
-            var client = new RestClient();
-            var restRequest = new RestRequest(url, Method.Get);
+            var client = new RestClient(url);
+            var restRequest = new RestRequest("api/people/1/", Method.Get);
             RestResponse restResponse = client.Get(restRequest);
 
-            var myResponseObject = JsonConvert.DeserializeObject<Root>(restResponse.Content);
-
+            var myResponseObject = JsonConvert.DeserializeObject<Response>(restResponse.Content);
             var valueFilms = myResponseObject.Films;
 
             foreach (var item in valueFilms)
@@ -28,7 +32,7 @@ namespace Task1
         }
     }
 
-    public class Root
+    public class Response
     {
         public string Name { get; set; }
         public string Height { get; set; }
